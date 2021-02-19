@@ -1,0 +1,4 @@
+[profile zymkey]
+region = us-east-1
+output = json
+credential_process = /opt/zymkey/credentials.sh
