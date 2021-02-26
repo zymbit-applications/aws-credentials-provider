@@ -24,9 +24,10 @@ AWS services requires each IoT device must have valid credentials issued by AWS.
 
 ## Process Overview
 
-### Global AWS Setup
-- Create a private certificate authority
-- Register private CA with AWS
+### Global Setup
+- Configure private certificate authority (optional)
+  - Create private CA
+  - Register CA with AWS
 - Create an IAM role with GetRole and PassRole permissions
 - Create a role trust policy for credentials provider to assume this role
 - Create a role alias linked to IAM role
@@ -49,6 +50,7 @@ AWS services requires each IoT device must have valid credentials issued by AWS.
 This global setup can be done anywhere with AWS CLI v2 installed.
 
 ### Create a private certificate authority
+On the device you want to hold your private CA and sign requests, do the following.
 
 **Copy the lines below into a script called mk_ca.sh.**
 ```
