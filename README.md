@@ -24,9 +24,10 @@ AWS services requires each IoT device must have valid credentials issued by AWS.
 
 ## Process Overview
 
-### Global AWS Setup
-- Create a private certificate authority
-- Register private CA with AWS
+### Global Setup
+- Configure private certificate authority (optional)
+  - Create private CA
+  - Register CA with AWS
 - Create an IAM role with GetRole and PassRole permissions
 - Create a role trust policy for credentials provider to assume this role
 - Create a role alias linked to IAM role
@@ -44,6 +45,7 @@ AWS services requires each IoT device must have valid credentials issued by AWS.
 - Curl credential provider url using TLS to receive AWS device credentials
 
 ### Create a private certificate authority
+On the device you want to hold your private CA and sign requests, do the following.
 
 **Copy the lines below into a script called mk_ca.sh.**
 ```
@@ -75,19 +77,18 @@ There are now three file in the directory CA_files.
 
 
 ### Register certificate authority with AWS
-1. From the AWS IoT Core console, select Secure, CAs, then Register.
-2. Click Register CA.
-3. Follow steps 1-3.
-4. For step 4 use this command. If you created a CA not using our steps, change
+1. From the AWS IoT Core console, select Secure, CAs, Register, Register CA.
+2. Follow steps 1-3.
+3. For step 4 use this command. If you created a CA not using our steps, change
 the -CA and -CAkey paths.
 ```
 openssl x509 -req -in verificationCert.csr -CA CA_files/zk_ca.pem -CAkey CA_files/zk_ca.key -CAcreateserial -out verificationCert.crt -days 500 -sha256
 ```
-5. Upload CA_file/zk_ca.pem as the CA certificate.
-6. Upload verificationCert.crt as verification certificate.
-7. Select Activate CA certificate and Enable auto-registration of device
+4. Upload CA_file/zk_ca.pem as the CA certificate.
+5. Upload verificationCert.crt as verification certificate.
+6. Select Activate CA certificate and Enable auto-registration of device
 certificates.
-8. Select Register CA certificate.
+7. Select Register CA certificate.
 
 
 
