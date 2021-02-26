@@ -120,8 +120,8 @@ openssl x509 -req -in verificationCert.csr -CA CA_files/zk_ca.pem \
 6. Register CA certificate, set it as active and allow device certificates to
 auto register.
 ```
-aws iot register-ca-certificate --ca-certificate CA_files/zk_ca.pem \
-                                --verification-certificate verificationCert.csr \
+aws iot register-ca-certificate --ca-certificate file://CA_files/zk_ca.pem \
+                                --verification-certificate file://verificationCert.csr \
                                 --set-as-active \
                                 --allow-auto-registration
 ```
