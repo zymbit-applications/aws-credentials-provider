@@ -47,7 +47,13 @@ AWS services requires each IoT device must have valid credentials issued by AWS.
 ## Global AWS Setup
 
 ### Prerequisites
-This global setup can be done anywhere with AWS CLI v2 installed.
+This global setup can be done anywhere with the AWS CLI installed and an associated user with the AWS CLI.
+
+#### Quick tutorial of how I setup a user to use AWS CLI.
+ - Go to AWS IAM console, click users, add user, input a user name, and check programatic access.
+ - Click Next:Permissions, "Attach existing policies directly", click AdministratorAccess
+ - Click Next:Tags, Next:Review, Create user. Stay on this page.
+ - On your device, run `sudo aws configure` and fill in the appropriate values from the AWS page.
 
 ### Create a private certificate authority
 On the device you want to hold your private CA and sign requests, do the following.
@@ -127,13 +133,20 @@ aws iot register-ca-certificate --ca-certificate file://CA_files/zk_ca.crt \
 ```
 
 
-### Create an IAM role with GetRole and PassRole permissions
-1. Go into AWS IAM, create a role with role-pass-permissions.json and use the
-given role trust policy.
+### Create an IAM role for credentials provider
+```
+aws iam create-role --role-name credential_helper --assume-role-policy-document file://role-trust-policy.json
+```
+Copy this roleARN. We need it later.
 
-Create role, click Certificate Manager, click Next,
+### Create a user with GetRole and PassRole permissions
 
 ### Create a role alias linked to IAM role
+```
+aws iot create-role-alias \
+       --role-alias deviceRoleAlias \
+       --role-arn arn:aws:iot:<REGION>:<ACCOUNT ID>:rolealias/deviceRoleAlias
+```
 
 ### Create an IoT policy which allows role alias to be assumed with a certificate
 
