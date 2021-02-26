@@ -43,6 +43,11 @@ AWS services requires each IoT device must have valid credentials issued by AWS.
 - Attach policy to device cert
 - Curl credential provider url using TLS to receive AWS device credentials
 
+## Global AWS Setup
+
+### Prerequisites
+This global setup can be done anywhere with AWS CLI v2 installed.
+
 ### Create a private certificate authority
 
 **Copy the lines below into a script called mk_ca.sh.**
@@ -75,29 +80,61 @@ There are now three file in the directory CA_files.
 
 
 ### Register certificate authority with AWS
-1. From the AWS IoT Core console, select Secure, CAs, then Register.
-2. Click Register CA.
-3. Follow steps 1-3.
-4. For step 4 use this command. If you created a CA not using our steps, change
-the -CA and -CAkey paths.
+On your private CA run the following commands.
+1. Copy the registration code for generating CA cert.
 ```
-openssl x509 -req -in verificationCert.csr -CA CA_files/zk_ca.pem -CAkey CA_files/zk_ca.key -CAcreateserial -out verificationCert.crt -days 500 -sha256
+aws iot get-registration-code
 ```
-5. Upload CA_file/zk_ca.pem as the CA certificate.
-6. Upload verificationCert.crt as verification certificate.
-7. Select Activate CA certificate and Enable auto-registration of device
-certificates.
-8. Select Register CA certificate.
 
+2. Create a private key for AWS CA to verify against.
+```
+openssl genrsa -out verificationCert.key 2048
+```
+
+3. Create a CSR for your CA to sign
+```
+openssl req -new -key verificationCert.key -out verificationCert.csr
+```
+
+4. Put registration code in the Common Name field
+```
+Country Name (2 letter code) [AU]:
+State or Province Name (full name) [Some-State]:
+Locality Name (eg, city) []:
+Organization Name (eg, company) [Internet Widgits Pty Ltd]:
+Organizational Unit Name (eg, section) []:
+Common Name (e.g. server FQDN or YOUR name) []: 9c9df696a8a09688d30e9040b4b719129e4d6dbd6a898eeb0c654af0a5753b41
+Email Address []:
+```
+
+5. Create a private key verification certificate for your CA. If you didn't follow
+our CA creation section, then the -CA and -CAkey file paths are likely different.
+```
+openssl x509 -req -in verificationCert.csr -CA CA_files/zk_ca.pem \
+-CAkey CA_files/zk_ca.key -CAcreateserial -out verificationCert.crt \
+-days 500 -sha256
+```
+
+6. Register CA certificate, set it as active and allow device certificates to
+auto register.
+```
+aws iot register-ca-certificate --ca-certificate CA_files/zk_ca.pem \
+                                --verification-certificate verificationCert.csr \
+                                --set-as-active \
+                                --allow-auto-registration
+```
 
 
 ### Create an IAM role with GetRole and PassRole permissions
-1. Go into AWS IAM, create a role with role-pass-permissions.json
+1. Go into AWS IAM, create a role with role-pass-permissions.json and use the
+given role trust policy.
 
+Create role, click Certificate Manager, click Next,
 
-### Create a role trust policy for credentials provider to assume this role
 ### Create a role alias linked to IAM role
+
 ### Create an IoT policy which allows role alias to be assumed with a certificate
+
 
 ## Device Process
 ### Generate CSR with Zymkey
