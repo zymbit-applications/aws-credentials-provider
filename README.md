@@ -22,9 +22,9 @@ Using AWS IoT also allows device data to be used by other AWS cloud services.
 AWS services requires each IoT device must have valid credentials issued by AWS.
 
 
-## Process Overview
+# Process Overview
 
-### Global Setup
+## Global Setup
 - Configure private certificate authority (optional)
   - Create private CA
   - Register CA with AWS
@@ -33,7 +33,7 @@ AWS services requires each IoT device must have valid credentials issued by AWS.
 - Create a role alias linked to IAM role
 - Create an IoT policy which allows role alias to be assumed with a certificate
 
-### Device Process
+## Device Process
 - Generate CSR with Zymkey
   - The CSR contains specific device info
 - Sign CSR with private CA
@@ -44,18 +44,18 @@ AWS services requires each IoT device must have valid credentials issued by AWS.
 - Attach policy to device cert
 - Curl credential provider url using TLS to receive AWS device credentials
 
-## Global AWS Setup
+# Global AWS Setup
 
-### Prerequisites
+## Prerequisites
 This global setup can be done anywhere with the AWS CLI installed and an associated user with the AWS CLI.
 
-#### Quick tutorial of how I setup a user to use AWS CLI.
+#### Quick tutorial of how to setup a user to use AWS CLI.
  - Go to AWS IAM console, click users, add user, input a user name, and check programatic access.
  - Click Next:Permissions, "Attach existing policies directly", click AdministratorAccess
  - Click Next:Tags, Next:Review, Create user. Stay on this page.
- - On your device, run `sudo aws configure` and fill in the appropriate values from the AWS page.
+ - On your device, run `aws configure` and fill in the appropriate values from the AWS page.
 
-### Create a private certificate authority
+## Create a private certificate authority
 On the device you want to hold your private CA and sign requests, do the following.
 
 **Copy the lines below into a script called mk_ca.sh.**
@@ -87,7 +87,7 @@ There are now three file in the directory CA_files.
     - The certificate for the CA
 
 
-### Register certificate authority with AWS
+## Register certificate authority with AWS
 On your private CA run the following commands.
 1. Copy the registration code for generating CA cert.
 ```
@@ -132,32 +132,55 @@ aws iot register-ca-certificate --ca-certificate file://CA_files/zk_ca.crt \
                                 --allow-auto-registration
 ```
 
-
-### Create an IAM role for credentials provider
+## Create an IAM role for credentials provider
 ```
-aws iam create-role --role-name credential_helper --assume-role-policy-document file://role-trust-policy.json
+aws iam create-role --role-name credential_helper --assume-role-policy-document file://aws-integration/role-trust-policy.json
 ```
-Copy this roleARN. We need it later.
 
-### Create a user with GetRole and PassRole permissions
+## Create GetRole/PassRole policy
+In user-pass-permissions.json, substitute ACCOUNT_ID, with the "Account" field from 
+```
+aws sts get-caller-identity
+```
+Under ROLE_NAME, substitute the role name you created in the previous step. Then run the following command,
+```
+aws iam create-policy --policy-name <NAME> \
+                      --policy-document file://aws-integration/user-pass-permissions.json
+```
+Copy the policy ARN.
 
-### Create a role alias linked to IAM role
+## Create a user
+```
+aws iam create-user --user-name <NAME> \
+                    --permissions-boundary <Policy ARN>
+```
+
+
+## Create a role alias linked to role
+If you need your roleARN you can run `aws iam get-role --role-name <NAME>`
 ```
 aws iot create-role-alias \
        --role-alias deviceRoleAlias \
-       --role-arn arn:aws:iot:<REGION>:<ACCOUNT ID>:rolealias/deviceRoleAlias
+       --role-arn <roleARN>
 ```
 
-### Create an IoT policy which allows role alias to be assumed with a certificate
 
+## Create an IoT policy which allows role alias to be assumed with a certificate
+In iot-role-policy.json, substitue REGION with the desired region, ACCOUNT_ID with the ID previously found and ALIAS with the role alias name. Then run the following command,
+```
+aws iot create-policy \
+    --policy-name credentialHelper \
+    --policy-document file://aws-integration/iot-role-policy.json
+```
+Record the policyARN.
 
-## Device Process
-### Generate CSR with Zymkey
+# Device Process - provision-device.sh
+## Generate CSR with Zymkey
   - The CSR contains specific device info
-### Sign CSR with private CA
-### Put device cert and root CA cert onto device
-### Register device cert in AWS with root CA cert
-### Create a IoT Thing in AWS
-### Attach thing to device cert
-### Attach policy to device cert
-### Curl credential provider url using TLS to receive AWS device credentials
+## Sign CSR with private CA
+## Put device cert and root CA cert onto device
+## Register device cert in AWS with root CA cert
+## Create a IoT Thing in AWS
+## Attach thing to device cert
+## Attach policy to device cert
+## Curl credential provider url using TLS to receive AWS device credentials

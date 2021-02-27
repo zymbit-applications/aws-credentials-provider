@@ -3,7 +3,7 @@
   "Statement": {
     "Effect": "Allow",
     "Action": "iot:AssumeRoleWithCertificate",
-    "Resource": "arn:aws:iot:REGION:ACCOUNT_ID:rolealias/${iot:Connection.Thing.ThingTypeName}-role-alias",
+    "Resource": "arn:aws:iot:REGION:ACCOUNT_ID:rolealias/ALIAS",
     "Condition": {
       "Bool": {
         "iot:Connection.Thing.IsAttached": "true"
