@@ -38,11 +38,12 @@ AWS services requires each IoT device must have valid credentials issued by AWS.
   - The CSR contains specific device info
 - Sign CSR with private CA
 - Put device cert and root CA cert onto device
-- Register device cert in AWS with root CA cert
-- Create a IoT Thing in AWS
-- Attach thing to device cert
-- Attach policy to device cert
-- Curl credential provider url using TLS to receive AWS device credentials
+- Run provision device script
+  - Register device cert in AWS with root CA cert
+  - Create a IoT Thing in AWS
+  - Attach thing to device cert
+  - Attach policy to device cert
+  - Curl credential provider url using TLS to receive AWS device credentials
 
 # Global AWS Setup
 
@@ -179,8 +180,9 @@ Record the policyARN.
     - The CSR contains specific device info
   - Sign CSR with private CA
   - Put device cert and root CA cert onto device
-  - Register device cert in AWS with root CA cert
-  - Create a IoT Thing in AWS
-  - Attach thing to device cert
-  - Attach policy to device cert
-  - Curl credential provider url using TLS to receive AWS device credentials
+  - Run provision device script
+    - Register device cert in AWS with root CA cert
+    - Create a IoT Thing in AWS
+    - Attach thing to device cert
+    - Attach policy to device cert
+    - Curl credential provider url using TLS to receive AWS device credentials
