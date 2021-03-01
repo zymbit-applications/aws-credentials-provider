@@ -1,6 +1,6 @@
 # How to integrate Zymbit with AWS IoT
 
-## Introduction - Perhaps it's own article?
+## Introduction
 It is impossible to guarantee the successful operation of a remote device
 indefinitely. The number of ways a device can be attacked may be infinite.
 The highest security standard then must assume remote devices can be penetrated
@@ -175,12 +175,12 @@ aws iot create-policy \
 Record the policyARN.
 
 # Device Process - provision-device.sh
-## Generate CSR with Zymkey
-  - The CSR contains specific device info
-## Sign CSR with private CA
-## Put device cert and root CA cert onto device
-## Register device cert in AWS with root CA cert
-## Create a IoT Thing in AWS
-## Attach thing to device cert
-## Attach policy to device cert
-## Curl credential provider url using TLS to receive AWS device credentials
+  - Generate CSR with Zymkey
+    - The CSR contains specific device info
+  - Sign CSR with private CA
+  - Put device cert and root CA cert onto device
+  - Register device cert in AWS with root CA cert
+  - Create a IoT Thing in AWS
+  - Attach thing to device cert
+  - Attach policy to device cert
+  - Curl credential provider url using TLS to receive AWS device credentials
