@@ -143,6 +143,7 @@ In user-pass-permissions.json, substitute ACCOUNT_ID, with the "Account" field f
 ```
 aws sts get-caller-identity
 ```
+
 Under ROLE_NAME, substitute the role name you created in the previous step. Then run the following command,
 ```
 aws iam create-policy --policy-name <NAME> \
@@ -176,11 +177,21 @@ aws iot create-policy \
 Record the policyARN.
 
 # Device Process - provision-device.sh
-  - Generate CSR with Zymkey
-    - The CSR contains specific device info
-  - Sign CSR with private CA
-  - Put device cert and root CA cert onto device
-  - Run provision device script
+  1. Generate CSR with Zymkey
+      - The CSR contains specific device info
+    - `openssl req -key nonzymkey.key -new -out zymkey.csr -engine zymkey_ssl -keyform e`
+      - Country Name (2 letter code) [AU]:
+      - State or Province Name (full name) [Some-State]:
+      - Locality Name (eg, city) []: REGION
+      - Organization Name (eg, company) [Internet Widgits Pty Ltd]: CREDENTIAL URL (cxxxxxxxxxxxxx)
+      - Organizational Unit Name (eg, section) []: ROLE ALIAS
+      - Common Name (e.g. server FQDN or YOUR name) []: THING NAME
+      - Email Address []:
+
+  2. Sign csr with private CA
+  3. Put device.crt into /opt/zymbit/device.crt
+  4. Put root.ca.pem into /opt/zymbit/root.ca.pem
+  5. Run provision device script
     - Register device cert in AWS with root CA cert
     - Create a IoT Thing in AWS
     - Attach thing to device cert

@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-
-
 #PREREQUISITES
 
 #1. Make certificate from zymkey
@@ -17,8 +15,6 @@
 #2. Sign csr with private CA
 #3. Put device.crt into /opt/zymbit/device.crt
 #4. Put root.ca.pem into /opt/zymbit/root.ca.pem
-
-
 
 
 
@@ -47,11 +43,6 @@ test ! -f $CONFIG && echo "$CONFIG does not exist." && exit 1
 
 
 
-
-
-
-
-
 #GET DEVICE INFO
 THING_NAME=$(openssl x509 -in $DEVICE_CERT -noout -subject -nameopt RFC2253 | awk -F , '{print $1}' | awk -F = '{print $3}')
 
@@ -68,7 +59,6 @@ echo AWS Region: $REGION
 read -p "Want to continue? [Y/n]: " continue
 [ "$continue" != "Y" ] && exit 1
 echo ""
-
 
 
 
