@@ -182,10 +182,10 @@ Record the policyARN.
     - `openssl req -key nonzymkey.key -new -out zymkey.csr -engine zymkey_ssl -keyform e`
       - Country Name (2 letter code) [AU]:
       - State or Province Name (full name) [Some-State]:
-      - Locality Name (eg, city) []: REGION
-      - Organization Name (eg, company) [Internet Widgits Pty Ltd]: CREDENTIAL URL (cxxxxxxxxxxxxx)
-      - Organizational Unit Name (eg, section) []: ROLE ALIAS
-      - Common Name (e.g. server FQDN or YOUR name) []: THING NAME
+      - Locality Name (eg, city) []: (REGION)
+      - Organization Name (eg, company) [Internet Widgits Pty Ltd]: (CREDENTIAL URL (cxxxxxxxxxxxxx))
+      - Organizational Unit Name (eg, section) []: (ROLE ALIAS)
+      - Common Name (e.g. server FQDN or YOUR name) []: (THING NAME)
       - Email Address []:
 
   2. Sign csr with private CA
