@@ -183,7 +183,9 @@ Record the policyARN.
       - Country Name (2 letter code) [AU]:
       - State or Province Name (full name) [Some-State]:
       - Locality Name (eg, city) []: (REGION)
-      - Organization Name (eg, company) [Internet Widgits Pty Ltd]: (CREDENTIAL URL (cxxxxxxxxxxxxx))
+      - Organization Name (eg, company) [Internet Widgits Pty Ltd]: (CREDENTIAL URL)
+        - To find the Credential URL, run `aws iot describe-endpoint --endpoint-type iot:CredentialProvider`
+        - The only part you need is the first cxxxxxxxxxxxxx.
       - Organizational Unit Name (eg, section) []: (ROLE ALIAS)
       - Common Name (e.g. server FQDN or YOUR name) []: (THING NAME)
       - Email Address []:
