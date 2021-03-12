@@ -194,8 +194,8 @@ Record the policyARN.
   3. Put device.crt into /opt/zymbit/device.crt
   4. Put root.ca.pem into /opt/zymbit/root.ca.pem
   5. Run provision device script
-    - Register device cert in AWS with root CA cert
-    - Create a IoT Thing in AWS
-    - Attach thing to device cert
-    - Attach policy to device cert
-    - Curl credential provider url using TLS to receive AWS device credentials
+      - Register device cert in AWS with root CA cert
+      - Create a IoT Thing in AWS
+      - Attach thing to device cert
+      - Attach policy to device cert
+      - Curl credential provider url using TLS to receive AWS device credentials
