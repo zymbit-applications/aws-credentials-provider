@@ -15,6 +15,7 @@
 #2. Sign csr with private CA
 #3. Put device.crt into /opt/zymbit/device.crt
 #4. Put root.ca.pem into /opt/zymbit/root.ca.pem
+#5. Make sure your IoT policy is called credentialHelper in AWS
 
 
 
@@ -35,8 +36,8 @@ test ! -f $CA_CERT && echo "$CA_CERT does not exist." && exit 1
 
 #Ensure /opt/zymbit/credentials.sh is readable/executable for the account that needs the credentials
 #WE may want to change this check to owner/group permissions. It currently is checking others permissions
-test ! -r $CRED_SCRIPT && echo "$CRED_SCRIPT is not readable by others." && exit 1
-test ! -x $CRED_SCRIPT && echo "$CRED_SCRIPT is not executable by others." && exit 1
+#test ! -r $CRED_SCRIPT && echo "$CRED_SCRIPT is not readable by others." && exit 1
+#test ! -x $CRED_SCRIPT && echo "$CRED_SCRIPT is not executable by others." && exit 1
 
 #Ensure ~/.aws/config file is correct
 test ! -f $CONFIG && echo "$CONFIG does not exist." && exit 1
@@ -88,7 +89,7 @@ aws iot attach-thing-principal --thing-name $THING_NAME --principal $CERT_ARN
 echo Attached certificate to $THING_NAME
 
 #Attach policy to certificate ARN
-POLICY="IoTDevicePolicy"
+POLICY="credentialHelper"
 aws iot get-policy --policy-name $POLICY &> /dev/null
 test $? != 0 && echo "No policy $POLICY in AWS IoT." && exit 1
 aws iot attach-policy --policy-name $POLICY --target $CERT_ARN
@@ -96,5 +97,5 @@ echo Attached $POLICY to $THING_NAME
 
 
 #Run the /opt/zymbit/credentials.sh script
-sudo /opt/zymbit/credentials.sh
-echo Got security credentials successfully
+#sudo /opt/zymbit/credentials.sh
+#echo Got security credentials successfully
