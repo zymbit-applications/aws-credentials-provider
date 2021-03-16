@@ -1,4 +1,4 @@
-# How to integrate Zymbit with AWS IoT
+# How to integrate Zymbit with AWS Credentials Provider
 
 ## Introduction
 It is impossible to guarantee the successful operation of a remote device
@@ -19,7 +19,7 @@ To manage device operations requires a central server to store and index device
 certificates, policies and attributes. Luckily, AWS IoT provides these features.
 
 Using AWS IoT also allows device data to be used by other AWS cloud services.
-AWS services requires each IoT device must have valid credentials issued by AWS.
+AWS services requires each IoT device to have valid credentials issued by AWS. The AWS credentials provider makes this process easy.
 
 
 # Process Overview
