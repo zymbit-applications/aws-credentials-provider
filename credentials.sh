@@ -33,7 +33,7 @@ if [ ! -f "$CACERT" ]; then
 fi
 
 # No longer using the AWS IoT Verisign root CA.  If the distro doesn't have certificate authorities installed this command will probably fail
-CREDENTIALS=$(curl --cacert $CACERT --cert $CERT $PKCS11_ENGINE_FOR_CURL --key $KEY -H "x-amzn-iot-thingname: $THING_NAME" $FULL_URL >& /dev/null)
+CREDENTIALS=$(curl --cacert $CACERT --cert $CERT $PKCS11_ENGINE_FOR_CURL --key $KEY -H "x-amzn-iot-thingname: $THING_NAME" $FULL_URL)
 
 returnValue=$?
 
