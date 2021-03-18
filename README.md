@@ -1,5 +1,5 @@
 # How to integrate Zymbit with AWS Credentials Provider
-
+This exact same tutorial is on https://community.zymbit.com/t/1144. It looks much better there.
 # Introduction
 ---
 It is impossible to guarantee the successful operation of a remote device indefinitely. The number of ways a device can be attacked may be infinite. The highest security standard then must assume remote devices can be penetrated at any time and plan for their failure.
